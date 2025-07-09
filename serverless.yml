@@ -64,9 +64,9 @@ resources:
           RetryGracePeriodSeconds: 0
 
 functions:
-  signIn:
-    handler: src/functions/signIn.handler
+  signUp:
+    handler: src/functions/signUp.handler
     events:
       - httpApi:
           method: post
-          path: /auth/sign-in
+          path: /auth/sign-up
