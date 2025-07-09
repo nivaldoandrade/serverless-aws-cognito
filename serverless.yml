@@ -70,3 +70,9 @@ functions:
       - httpApi:
           method: post
           path: /auth/sign-up
+  confirmSignUp:
+    handler: src/functions/confirmSignUp.handler
+    events:
+      - httpApi:
+          method: post
+          path: /auth/confirm-signup
