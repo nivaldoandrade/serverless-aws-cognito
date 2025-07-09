@@ -9,6 +9,9 @@ provider:
   runtime: nodejs22.x
   memorySize: 128
   architecture: arm64
+  environment:
+    COGNITO_CLIENT_ID: !Ref UserPoolClient
+    COGNITO_CLIENT_SECRET: !GetAtt UserPoolClient.ClientSecret
 
 package:
   individually: true
@@ -19,10 +22,51 @@ build:
     minify: true
     sourcemap: false
 
+resources:
+  Resources:
+    UserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: ${self:service}-${sls:stage}-UserPool
+        AccountRecoverySetting:
+          RecoveryMechanisms:
+            - Name: verified_email
+              Priority: 1
+        AdminCreateUserConfig:
+          AllowAdminCreateUserOnly: false
+        AutoVerifiedAttributes:
+          - email
+        UsernameAttributes:
+          - email
+        MfaConfiguration: OFF
+        Policies:
+          PasswordPolicy:
+            MinimumLength: 8
+            RequireLowercase: false
+            RequireNumbers: false
+            RequireSymbols: false
+            RequireUppercase: false
+    UserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: ${self:service}-${sls:stage}-UserPoolClient
+        UserPoolId: !Ref UserPool
+        ExplicitAuthFlows:
+          - ALLOW_USER_PASSWORD_AUTH
+        GenerateSecret: true
+        AccessTokenValidity: 1
+        RefreshTokenValidity: 7
+        TokenValidityUnits:
+          AccessToken: days
+          RefreshToken: days
+        RefreshTokenRotation:
+          Feature: ENABLED
+          RetryGracePeriodSeconds: 0
+
 functions:
-  hello:
-    handler: src/functions/handler.hello
+  signIn:
+    handler: src/functions/signIn.handler
     events:
       - httpApi:
-          path: /
-          method: get
+          method: post
+          path: /auth/sign-in
