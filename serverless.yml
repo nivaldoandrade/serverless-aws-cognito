@@ -88,3 +88,9 @@ functions:
       - httpApi:
           method: post
           path: /auth/refresh-token
+  me:
+    handler: src/functions/me.handler
+    events:
+      - httpApi:
+          method: get
+          path: /me
