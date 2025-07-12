@@ -76,3 +76,9 @@ functions:
       - httpApi:
           method: post
           path: /auth/confirm-signup
+  signIn:
+    handler: src/functions/signIn.handler
+    events:
+      - httpApi:
+          method: post
+          path: /auth/sign-in
