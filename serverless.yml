@@ -124,3 +124,11 @@ functions:
       - httpApi:
           method: post
           path: /auth/confirm-forgot-password
+  customMessageTrigger:
+    handler: src/functions/customMessageTrigger.handler
+    events:
+      - cognitoUserPool:
+          pool: ${self:service}-${sls:stage}-UserPool
+          trigger: CustomMessage
+          existing: true
+          forceDeploy: true
