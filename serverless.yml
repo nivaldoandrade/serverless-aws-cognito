@@ -112,3 +112,15 @@ functions:
           path: /me
           authorizer:
             name: CognitoAuthorizer
+  forgotPassword:
+    handler: src/functions/forgotPassword.handler
+    events:
+      - httpApi:
+          method: post
+          path: /auth/forgot-password
+  confirmForgotPassword:
+    handler: src/functions/confirmForgotPassword.handler
+    events:
+      - httpApi:
+          method: post
+          path: /auth/confirm-forgot-password
