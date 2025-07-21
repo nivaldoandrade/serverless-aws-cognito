@@ -4,6 +4,7 @@ import {
 } from '@aws-sdk/client-cognito-identity-provider';
 import * as z from 'zod/mini';
 import { cognitoClient } from '../clients/cognitoClient';
+import { env } from '../config/env';
 import { generateSecretHash } from '../utils/generateSecretHash';
 import {
   ControllerResponse,
@@ -28,7 +29,7 @@ export class SignUpController implements IController {
 
     try {
       const command = new SignUpCommand({
-        ClientId: process.env.COGNITO_CLIENT_ID,
+        ClientId: env.COGNITO_CLIENT_ID,
         SecretHash: generateSecretHash(email),
         Username: email,
         Password: password,
