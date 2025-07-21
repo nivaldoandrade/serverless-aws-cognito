@@ -1,23 +1,6 @@
-import { AdminGetUserCommand } from '@aws-sdk/client-cognito-identity-provider';
-import { APIGatewayProxyEventV2WithJWTAuthorizer } from 'aws-lambda';
-import { cognitoClient } from '../clients/cognitoClient';
+import { MeController } from '../controllers/MeController';
+import { httpAdapter } from '../utils/httpAdapter';
 
-export async function handler(event: APIGatewayProxyEventV2WithJWTAuthorizer) {
-  const claims = event.requestContext.authorizer.jwt.claims;
+const meController = new MeController();
 
-  const command = new AdminGetUserCommand({
-    Username: claims.sub as string,
-    UserPoolId: process.env.COGNITO_USER_POOL_ID,
-  });
-
-  const { UserAttributes } = await cognitoClient.send(command);
-
-  const email = UserAttributes?.find(({ Name }) => Name === 'email')?.Value;
-
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      email,
-    }),
-  };
-}
+export const handler = httpAdapter(meController);
