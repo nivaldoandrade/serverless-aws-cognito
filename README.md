@@ -1,69 +1,177 @@
-<!--
-title: 'AWS Simple HTTP Endpoint example in NodeJS'
-description: 'This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.'
-layout: Doc
-framework: v4
-platform: AWS
-language: nodeJS
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, Inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Serverless API Auth com AWS Cognito
 
-# Serverless Framework Node HTTP API on AWS
+Esta API é uma aplicação serverless que demonstra a implementação de autenticação de usuários, envio de e-mails e integração com o Cognito da AWS. Utiliza Node.js, TypeScript e é hospedada na AWS Lambda via framework Serverless. A API possui endpoints para autenticação, cadastro, recuperação de senha, validações e envio de email de confirmação e de recuperação de senha.
 
-This template demonstrates how to make a simple HTTP API with Node.js running on AWS Lambda and API Gateway using the Serverless Framework.
+## **Requisitos**
 
-This template does not include any kind of persistence (database). For more advanced examples, check out the [serverless/examples repository](https://github.com/serverless/examples/) which includes Typescript, Mongo, DynamoDB and other examples.
+- [Node.js 20 ou superior](https://nodejs.org/en/)
+- [Configuração do Serverless](#configuração-do-serverless)
+- [Configuração das Credenciais AWS](#configuração-das-credenciais-aws)
 
-## Usage
+#### Configuração do Serverless
 
-### Deployment
+1. Instale o Serverless via NPM:
 
-In order to deploy the example, you need to run the following command:
+   ```bash
+   npm i serverless -g
+   ```
 
-```
-serverless deploy
-```
+   Para mais informações: [Installation](https://www.serverless.com/framework/docs/getting-started#installation).
 
-After running deploy, you should see output similar to:
+2. Faça login no Serverless:
 
-```
-Deploying "serverless-http-api" to stage "dev" (us-east-1)
+   Crie uma conta no Serverless e faça login com o comando abaixo:
 
-✔ Service deployed to stack serverless-http-api-dev (91s)
+   ```bash
+   sls login
+   ```
 
-endpoint: GET - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com/
-functions:
-  hello: serverless-http-api-dev-hello (1.6 kB)
-```
+   Para mais informações: [Signing In](https://www.serverless.com/framework/docs/getting-started#signing-in).
 
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [HTTP API (API Gateway V2) event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api).
+#### Configuração das Credenciais AWS
 
-### Invocation
+Para mais informações: [AWS Credentials](https://www.serverless.com/framework/docs/providers/aws/guide/credentials#aws-credentials)
 
-After successful deployment, you can call the created application via HTTP:
+##### **Opção 1: AWS CLI (Recomendado)**
 
-```
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
-```
+1. Faça o download e instalação: [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html#getting-started-install-instructions).
 
-Which should result in response similar to:
+2. Crie um: [IAM user](https://docs.aws.amazon.com/cli/latest/userguide/cli-authentication-user.html#cli-authentication-user-create)
+
+   **OBS:** No **Attach existing policies directly** e procure e adicione a política **AdministratorAccess**.
+
+3. Configure AWS CLI:
+
+   ```bash
+   aws configure
+   ```
+
+   Preencha com:
+   - AWS Access Key ID
+   - AWS Secret Access Key
+   - Default region: `us-east-1`
+   - Default output format: `json`
+
+   Para mais informações: [Configure the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-authentication-user.html#cli-authentication-user-configure.title)
+
+##### **Opção 2: Variáveis de Ambiente**
+
+1. Crie um: [IAM user](https://docs.aws.amazon.com/cli/latest/userguide/cli-authentication-user.html#cli-authentication-user-create)
+
+   **OBS:** No **Attach existing policies directly** e procure e adicione a política **AdministratorAccess**.
+
+2. Renomeie o arquivo `.env.example` para `.env` e preencha com os valores de `AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY`.
+
+## Passo a passo
+
+1. Clone o repositório:
+
+   ```bash
+   git clone https://github.com/nivaldoandrade/serverless-aws-cognito.git
+   ```
+
+2. Instale as dependências:
+
+   ```bash
+     yarn
+     # ou
+     npm install
+   ```
+
+3. Configure as variáveis de ambiente:
+
+   Se caso não estiver utilizando a [AWS CLI](#opção-1-aws-clirecomendado) verifique a seção [Opção 2: Variáveis de Ambiente](#opção-2-variáveis-de-ambiente).
+
+4. Realize o deploy na AWS:
+
+   ```bash
+   serverless deploy
+   # ou
+   sls deploy
+   ```
+
+   Se tudo ocorrer bem, o ouput esperado será:
+
+   ```plaintext
+   endpoints:
+   POST - https://xxx.execute-api.xxx.amazonaws.com/auth/sign-up
+   POST - https://xxx.execute-api.xxx.amazonaws.com/auth/confirm-signup
+   ...
+   ```
+
+   O endpoint base da API será: `https://xxx.execute-api.xxx.amazonaws.com`
+
+## Endpoints
+
+| Método | Url                           | Descrição                         | Exemplo do request body válido                                      |
+| ------ | ----------------------------- | --------------------------------- | ------------------------------------------------------------------- |
+| POST   | /auth/sign-up                 | Criar um novo usuário             | [JSON](#sign-up---authsign-up)                                      |
+| POST   | /auth/confirm-signup          | Confirmar código de cadastro      | [JSON](#confirm-sign-up---authconfirm-signup)                       |
+| POST   | /auth/sign-in                 | Autenticar um usuário             | [JSON](#sign-in---authsign-in)                                      |
+| POST   | /auth/refresh-token           | Obter novo par de tokens          | [JSON](#refresh-token---authrefresh-token)                          |
+| GET    | /me                           | Obter um usuário pelo accessToken | [**HEADER**](#me---me)                                              |
+| POST   | /auth/forgot-password         | Enviar e-mail de recuperação      | [JSON](#forgot-password---authforgot-password)                      |
+| POST   | /auth/confirm-forgot-password | Redefinir senha                   | [JSON](#confirmation-forgot-password---authconfirm-forgot-password) |
+
+### Exemplo do request body válido
+
+##### Sign Up -> /auth/sign-up
 
 ```json
-{ "message": "Go Serverless v4! Your function executed successfully!" }
+{
+  "email": "john.doe@email.com",
+  "password": "12345678"
+}
 ```
 
-### Local development
+##### Confirm Sign Up -> /auth/confirm-signup
 
-The easiest way to develop and test your function is to use the `dev` command:
+```json
+{
+  "email": "john.doe@email.com",
+  "code": "123456"
+}
+```
+
+##### Sign In -> /auth/sign-in
+
+```json
+{
+  "email": "john.doe@email.com",
+  "password": "12345678"
+}
+```
+
+##### Refresh Token -> /auth/refresh-token
+
+```json
+{
+  "refreshToken": "{{refreshToken}}"
+}
+```
+
+##### Me -> /me
+
+Adicionar o Header:
 
 ```
-serverless dev
+authorization: Bearer {{accessToken}}
 ```
 
-This will start a local emulator of AWS Lambda and tunnel your requests to and from AWS Lambda, allowing you to interact with your function as if it were running in the cloud.
+##### Forgot Password -> /auth/forgot-password
 
-Now you can invoke the function as before, but this time the function will be executed locally. Now you can develop your function locally, invoke it, and see the results immediately without having to re-deploy.
+```json
+{
+  "email": "john.doe@email.com"
+}
+```
 
-When you are done developing, don't forget to run `serverless deploy` to deploy the function to the cloud.
+##### Confirmation Forgot Password -> /auth/confirm-forgot-password
+
+```json
+{
+  "email": "john.doe@email.com",
+  "code": "123456",
+  "newPassword": "12341234"
+}
+```
