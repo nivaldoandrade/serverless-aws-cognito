@@ -1,7 +1,7 @@
 # "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: nivaldoandrade
+# org:
 # "service" is the name of this project. This will also be added to your AWS resource names.
-service: serveless-aws-cognito
+service: serverless-aws-cognito
 
 provider:
   name: aws
