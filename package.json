@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.840.0",
+    "@aws-sdk/client-dynamodb": "^3.848.0",
+    "@aws-sdk/lib-dynamodb": "^3.850.0",
     "@react-email/components": "0.3.1",
+    "ksuid": "^3.0.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "zod": "^4.0.5"
