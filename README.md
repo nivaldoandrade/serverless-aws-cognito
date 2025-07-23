@@ -119,6 +119,7 @@ Para mais informações: [AWS Credentials](https://www.serverless.com/framework/
 
 ```json
 {
+  "name": "John Doe",
   "email": "john.doe@email.com",
   "password": "12345678"
 }
