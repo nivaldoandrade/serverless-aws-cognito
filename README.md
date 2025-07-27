@@ -176,3 +176,7 @@ authorization: Bearer {{accessToken}}
   "newPassword": "12341234"
 }
 ```
+
+### Modelagem do Banco de dados
+
+A modelagem **single table** no dynamoDb foi documentada na [planilha](https://docs.google.com/spreadsheets/d/1eqpN22GMjRSthdRzzOB3bDfUoRL4nx5C8IoqHpneUSs/edit?usp=sharing).
