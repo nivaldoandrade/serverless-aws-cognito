@@ -79,6 +79,7 @@ export class SignUpController implements IController {
                 SK: `PROFILE#${accountId}`,
                 type: 'PROFILE',
                 name,
+                accountId,
               },
             },
           },
