@@ -15,14 +15,14 @@ export function httpAdapter(controller: IController) {
     try {
       const body = bodyParser(event.body);
 
-      const userId =
+      const accountId =
         'authorizer' in event.requestContext
-          ? (event.requestContext.authorizer.jwt.claims['sub'] as string)
+          ? (event.requestContext.authorizer.jwt.claims['internalId'] as string)
           : undefined;
 
       const { statusCode, body: resultBody } = await controller.execute({
         body,
-        userId,
+        accountId,
       });
 
       return lambdaHttpResponse(statusCode, resultBody);

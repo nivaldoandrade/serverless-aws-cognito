@@ -1,6 +1,6 @@
 export type IControllerRequest<TBody = Record<string, unknown>> = {
   body: TBody;
-  userId?: string;
+  accountId?: string;
 };
 
 export type ControllerResponse = {
