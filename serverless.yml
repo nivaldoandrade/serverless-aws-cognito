@@ -69,6 +69,11 @@ resources:
             RequireNumbers: false
             RequireSymbols: false
             RequireUppercase: false
+        Schema:
+          - Name: internalId
+            AttributeDataType: String
+            Mutable: false
+            Required: false
     UserPoolClient:
       Type: AWS::Cognito::UserPoolClient
       Properties:

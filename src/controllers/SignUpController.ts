@@ -37,18 +37,24 @@ export class SignUpController implements IController {
     let externalId: string | undefined;
 
     try {
+      const accountId = generateUID();
+
       const command = new SignUpCommand({
         ClientId: env.COGNITO_CLIENT_ID,
         SecretHash: generateSecretHash(email),
         Username: email,
         Password: password,
+        UserAttributes: [
+          {
+            Name: 'custom:internalId',
+            Value: accountId,
+          },
+        ],
       });
 
       const { UserSub } = await cognitoClient.send(command);
 
       externalId = UserSub;
-
-      const accountId = generateUID();
 
       const transactCommand = new TransactWriteCommand({
         TransactItems: [
