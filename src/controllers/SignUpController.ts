@@ -3,7 +3,7 @@ import {
   SignUpCommand,
   UsernameExistsException,
 } from '@aws-sdk/client-cognito-identity-provider';
-import { PutCommand } from '@aws-sdk/lib-dynamodb';
+import { TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
 import * as z from 'zod/mini';
 import { cognitoClient } from '../clients/cognitoClient';
 import { dynamoClient } from '../clients/dynamoClient';
@@ -50,20 +50,36 @@ export class SignUpController implements IController {
 
       const accountId = generateUID();
 
-      const putCommand = new PutCommand({
-        TableName: env.TABLE_NAME,
-        Item: {
-          PK: `ACCOUNT#${accountId}`,
-          SK: `ACCOUNT#${accountId}`,
-          type: 'ACCOUNT',
-          id: accountId,
-          externalId: UserSub!,
-          email,
-          name,
-        },
+      const transactCommand = new TransactWriteCommand({
+        TransactItems: [
+          {
+            Put: {
+              TableName: env.TABLE_NAME,
+              Item: {
+                PK: `ACCOUNT#${accountId}`,
+                SK: `ACCOUNT#${accountId}`,
+                type: 'ACCOUNT',
+                id: accountId,
+                externalId: UserSub!,
+                email,
+              },
+            },
+          },
+          {
+            Put: {
+              TableName: env.TABLE_NAME,
+              Item: {
+                PK: `ACCOUNT#${accountId}`,
+                SK: `PROFILE#${accountId}`,
+                type: 'PROFILE',
+                name,
+              },
+            },
+          },
+        ],
       });
 
-      await dynamoClient.send(putCommand);
+      await dynamoClient.send(transactCommand);
 
       return {
         statusCode: 201,
