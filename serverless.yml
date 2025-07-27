@@ -26,7 +26,9 @@ provider:
         - Effect: Allow
           Resource:
             - !GetAtt MainTable.Arn
-          Action: dynamodb:PutItem
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:Query
   httpApi:
     authorizers:
       CognitoAuthorizer:
