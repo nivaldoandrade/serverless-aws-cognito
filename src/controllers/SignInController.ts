@@ -47,7 +47,7 @@ export class SignInController implements IController {
       statusCode: 201,
       body: {
         accessToken: AuthenticationResult.AccessToken,
-        RefreshToken: AuthenticationResult.RefreshToken,
+        refreshToken: AuthenticationResult.RefreshToken,
       },
     };
   }
