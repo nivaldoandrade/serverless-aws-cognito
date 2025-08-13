@@ -6,7 +6,8 @@
   "author": "nivaldoandrade <nivaldoandradef@gmail.com>",
   "scripts": {
     "prepare": "husky || true",
-    "test": "jest --watch",
+    "test": "jest",
+    "test:coverage": "jest --coverage --watchAll false",
     "email:dev": "email dev --dir src/emails/templates"
   },
   "dependencies": {

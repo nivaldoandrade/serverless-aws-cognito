@@ -6,12 +6,17 @@ const defaultPresetTransformCfg = createDefaultPreset().transform;
 /** @type {import("jest").Config} **/
 module.exports = {
   testEnvironment: 'node',
-  collectCoverage: true,
+  // collectCoverage: true,
   clearMocks: true,
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   roots: ['<rootDir>/src'],
-  coveragePathIgnorePatterns: ['<rootDir>/src/test/mocks/'],
+  setupFiles: ['<rootDir>/src/tests/mocks/mockEnv.ts'],
+  collectCoverageFrom: [
+    // 'src/**/*.ts',
+    '!src/tests/mocks/*.ts',
+    '!src/config/*.ts',
+  ],
   transform: {
     ...defaultPresetTransformCfg,
   },
