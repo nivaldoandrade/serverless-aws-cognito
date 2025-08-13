@@ -1,5 +1,6 @@
 import { ForgotPasswordCommand } from '@aws-sdk/client-cognito-identity-provider';
 import { z } from 'zod/mini';
+import { $ZodError } from 'zod/v4/core';
 import { cognitoClient } from '../clients/cognitoClient';
 import { env } from '../config/env';
 import { generateSecretHash } from '../utils/generateSecretHash';
@@ -30,6 +31,9 @@ export class ForgotPasswordController implements IController {
 
       await cognitoClient.send(command);
     } catch (error) {
+      if (error instanceof $ZodError) {
+        throw error;
+      }
       console.log(error);
     }
 
