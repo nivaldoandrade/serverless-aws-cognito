@@ -43,13 +43,13 @@ export class RefreshTokenController implements IController {
         statusCode: 201,
         body: {
           accessToken: AuthenticationResult.AccessToken,
-          refreshToken: AuthenticationResult.AccessToken,
+          refreshToken: AuthenticationResult.RefreshToken,
         },
       };
     } catch (error) {
       if (error instanceof RefreshTokenReuseException) {
         return {
-          statusCode: error.$response?.statusCode || 400,
+          statusCode: 400,
           body: {
             error: error.message,
           },
