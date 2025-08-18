@@ -10,13 +10,13 @@ import { mockCognitoSend, mockDynamoSend } from '../../tests/mocks/awsClients';
 import '../../tests/mocks/mockEnv';
 import { SignUpController } from '../SignUpController';
 
-jest.mock('../../config/env', () => ({
-  env: {
-    COGNITO_CLIENT_ID: 'mockClientId',
-    COGNITO_USER_POOL_ID: 'mockUserPoolId',
-    TABLE_NAME: 'mockTable',
-  },
-}));
+// jest.mock('../../config/env', () => ({
+//   env: {
+//     COGNITO_CLIENT_ID: 'mockClientId',
+//     COGNITO_USER_POOL_ID: 'mockUserPoolId',
+//     TABLE_NAME: 'mockTable',
+//   },
+// }));
 
 describe('SignUpController', () => {
   let controller: SignUpController;
