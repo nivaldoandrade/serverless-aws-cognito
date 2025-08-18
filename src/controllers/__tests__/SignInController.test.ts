@@ -52,12 +52,12 @@ describe('SignInController', () => {
   });
 
   test('should be validate input schema and throw if invalid', async () => {
-    const invalideBody = {
+    const invalidBody = {
       email: '',
       password: '12345678',
     };
 
-    await expect(controller.execute({ body: invalideBody })).rejects.toThrow(
+    await expect(controller.execute({ body: invalidBody })).rejects.toThrow(
       $ZodError,
     );
   });

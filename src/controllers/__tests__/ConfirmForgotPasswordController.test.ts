@@ -35,13 +35,13 @@ describe('ConfirmForgotPasswordController', () => {
   });
 
   test('should be validate body schema and throw if invalid', async () => {
-    const invalideBody = {
+    const invalidBody = {
       code: '',
       email: '',
       password: '',
     };
 
-    await expect(controller.execute({ body: invalideBody })).rejects.toThrow(
+    await expect(controller.execute({ body: invalidBody })).rejects.toThrow(
       $ZodError,
     );
   });

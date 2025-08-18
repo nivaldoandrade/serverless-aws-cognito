@@ -65,11 +65,11 @@ describe('RefreshTokenController', () => {
   });
 
   test('should be validate body schema and throw if invalid', async () => {
-    const invalideBody = {
+    const invalidBody = {
       refreshToken: '',
     };
 
-    await expect(controller.execute({ body: invalideBody })).rejects.toThrow(
+    await expect(controller.execute({ body: invalidBody })).rejects.toThrow(
       $ZodError,
     );
   });
