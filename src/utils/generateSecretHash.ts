@@ -1,8 +1,9 @@
 import { createHmac } from 'node:crypto';
+import { env } from '../config/env';
 
 export function generateSecretHash(email: string) {
-  const clientId = process.env.COGNITO_CLIENT_ID;
-  const clientSecret = process.env.COGNITO_CLIENT_SECRET ?? '';
+  const clientId = env.COGNITO_CLIENT_ID;
+  const clientSecret = env.COGNITO_CLIENT_SECRET;
 
   return createHmac('SHA256', clientSecret)
     .update(`${email}${clientId}`)
