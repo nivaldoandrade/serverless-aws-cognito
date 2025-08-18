@@ -8,6 +8,6 @@ export function bodyParser(body: APIGatewayProxyEventV2['body']) {
 
     return JSON.parse(body);
   } catch {
-    throw Error('Malformated body.');
+    throw Error('Malformed body.');
   }
 }
