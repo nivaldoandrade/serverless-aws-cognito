@@ -170,7 +170,7 @@ functions:
           method: post
           path: /auth/confirm-forgot-password
   customMessageTrigger:
-    handler: src/functions/customMessageTrigger.handler
+    handler: src/functions/triggers/customMessageTrigger.handler
     events:
       - cognitoUserPool:
           pool: ${self:service}-${sls:stage}-UserPool
@@ -178,4 +178,4 @@ functions:
           existing: true
           forceDeploy: true
   preTokenGenerationTrigger:
-    handler: src/functions/preTokenGenerationTrigger.handler
+    handler: src/functions/triggers/preTokenGenerationTrigger.handler

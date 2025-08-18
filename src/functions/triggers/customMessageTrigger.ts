@@ -1,7 +1,7 @@
 import { render } from '@react-email/components';
 import { CustomMessageTriggerEvent } from 'aws-lambda';
-import ForgotPasswordTemplate from '../emails/templates/ForgotPasswordTemplate';
-import SignUpTemplate from '../emails/templates/SignUpTemplate';
+import ForgotPasswordTemplate from '../../emails/templates/ForgotPasswordTemplate';
+import SignUpTemplate from '../../emails/templates/SignUpTemplate';
 
 export async function handler(event: CustomMessageTriggerEvent) {
   const code = event.request.codeParameter;
