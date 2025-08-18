@@ -6,8 +6,8 @@
   "author": "nivaldoandrade <nivaldoandradef@gmail.com>",
   "scripts": {
     "prepare": "husky || true",
-    "test": "jest",
-    "test:coverage": "jest --coverage --watchAll false",
+    "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest",
+    "test:coverage": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --coverage --watchAll false",
     "email:dev": "email dev --dir src/emails/templates"
   },
   "dependencies": {

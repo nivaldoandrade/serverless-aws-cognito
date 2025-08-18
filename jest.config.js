@@ -16,6 +16,10 @@ module.exports = {
     // 'src/**/*.ts',
     '!src/tests/mocks/*.ts',
     '!src/config/*.ts',
+    '!src/clients/*',
+    '!src/emails/components/*',
+    '!src/controllers/type/*',
+    '!src/functions/*',
   ],
   transform: {
     ...defaultPresetTransformCfg,
