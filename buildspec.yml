@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+
+  pre-build:
+    commands:
+      - npm i --silent --no-progress -g serverless
+      - yarn install --lock-file
+
+  build:
+    commands:
+      - serverless deploy
