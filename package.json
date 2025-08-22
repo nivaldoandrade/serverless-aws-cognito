@@ -8,7 +8,9 @@
     "prepare": "husky || true",
     "test": "NODE_OPTIONS=\"--experimental-vm-modules\" jest",
     "test:coverage": "NODE_OPTIONS=\"--experimental-vm-modules\" jest --coverage --watchAll false",
-    "email:dev": "email dev --dir src/emails/templates"
+    "email:dev": "email dev --dir src/emails/templates",
+    "ci:lint": "prettier --check src",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@aws-sdk/client-cognito-identity-provider": "^3.840.0",
